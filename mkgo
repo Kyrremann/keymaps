@@ -1,0 +1,132 @@
+#!/bin/bash
+
+## MKGO
+#
+# mkgo init
+# mkgo copy $keyboard
+#           $keyboard:keymap or else default
+#           $keyboard/rev1 if needed
+# mkgo flash $keyboard
+#
+##
+
+baseQmkDir="./qmk_firmware/keyboards"
+
+function get_local_keyboard_folder {
+    get_keyboard_folder $(pwd) $1
+}
+
+function get_qmk_keyboard_folder {
+    get_keyboard_folder $baseQmkDir $1
+}
+
+function get_keyboard_folder {
+    baseDir=$1
+    keyboard=$2
+
+    if [[ $keyboard == *":"* ]]; then
+	keyboardDir=${keyboard/":"/"/keymaps/"}
+    else
+	keyboardDir="$keyboard/keymaps/default"
+    fi;
+
+    if [ ! -d "$baseDir/$keyboardDir" ]; then
+	echo "No such QMK-keyboard $keyboardDir"
+	echo "Have you typed correctly, or maybe it's in a subfolder?"
+	exit 1
+    fi;
+    echo "$keyboardDir"
+}
+
+function init_folder {
+    if [ -d .git ]; then
+	echo .git;
+    else
+	git init
+    fi;
+
+    git submodule add git@github.com:qmk/qmk_firmware.git
+    git submodule init
+    update_qmk
+    git add qmk_firmware
+    git commit -m "Init commit with QMK submodule"
+}
+
+function update_qmk {
+    git submodule update --remote
+    (
+	cd "./qmk_firmware" || exit
+	make git-submodule
+    )
+    git add qmk_firmware
+    git commit -m "Updated to latest qmk"
+}
+
+function clean_qmk {
+    (
+	cd "./qmk_firmware" || exit
+	git checkout master
+	git restore .
+	git clean -f
+    )
+}
+
+function copy_keyboard {
+    keyboard=$1
+    keyboardDir=$(get_qmk_keyboard_folder "$keyboard")
+
+    mkdir -p "$keyboardDir"
+    if hash ditto 2>/dev/null; then
+	ditto "$baseQmkDir/$keyboardDir" "$keyboardDir"
+    else
+	cp --parents "$baseQmkDir/$keyboardDir" "$keyboardDir" # TODO test that it works
+    fi
+}
+
+function flash_keyboard {
+    keyboard=$1
+    keyboardDir=$(get_local_keyboard_folder "$keyboard")
+    
+    if [ ! -d "./$keyboardDir" ]; then
+	echo "No such local keyboard $keyboardDir"
+	echo "Have you typed correctly, or maybe it's in a subfolder?"
+	exit 1
+    fi;
+    
+    if hash ditto 2>/dev/null; then
+	ditto "$keyboard" "$baseQmkDir/$keyboard"
+    else
+	cp --parents "$keyboard" "$baseQmkDir/$keyboard" # TODO test that it works
+    fi
+
+    (
+	cd "./qmk_firmware/" || exit
+	make "$keyboard:default:flash"
+	git reset --hard # TODO pipe meldinger til dev/null
+    )
+}
+
+function main {
+    subcommand=$1; shift
+    case "$subcommand" in
+	init)
+	    init_folder
+	    ;;
+	update)
+	    update_qmk
+	    ;;
+	copy)
+	    keyboard=$1; shift
+	    copy_keyboard "$keyboard"
+	    ;;
+	flash)
+	    keyboard=$1; shift
+	    flash_keyboard "$keyboard"
+	    ;;
+	clean)
+	    clean_qmk
+	    ;;
+    esac
+}
+
+main "$@"
