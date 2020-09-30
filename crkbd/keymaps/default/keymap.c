@@ -48,8 +48,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [_LOWER] = LAYOUT( \
        KC_NUBS, KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                              KC_6,    KC_7,    KC_8,    KC_9,    KC_0,   KC_MINS,    \
-       KC_MPLY, L(KC_1), L(KC_2), L(KC_3), L(KC_4), L(KC_5),                           L(KC_6), L(KC_7), L(KC_8), L(KC_9), L(KC_0),L(KC_MINS), \
-       KC_MUTE, KC_GRV,  KC_TRNS, L(KC_EQL),L(KC_RBRC),L(KC_BSLS),                     KC_BSLS, KC_RBRC, KC_EQL,  KC_VOLD, KC_VOLU,KC_TRNS, \
+       KC_TRNS, L(KC_1), L(KC_2), L(KC_3), L(KC_4), L(KC_5),                           L(KC_6), L(KC_7), L(KC_8), L(KC_9), L(KC_0),L(KC_MINS), \
+       KC_TRNS, KC_GRV,  KC_TRNS, L(KC_EQL),L(KC_RBRC),L(KC_BSLS),                     KC_BSLS, KC_RBRC, KC_EQL,  KC_TRNS, KC_TRNS,KC_TRNS, \
                                            KC_RALT, KC_TRNS, KC_ESC,          KC_TRNS, KC_TRNS, KC_DEL \
     ),
 
@@ -61,9 +61,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
 
   [_ADJUST] = LAYOUT( \
-       RESET,  KC_NO,    KC_NO,   KC_NO,   KC_NO,   KC_NO,                             KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO, \
+       KC_NO,  KC_NO,    KC_NO,   KC_NO,   KC_NO,   KC_NO,                             KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   RESET, \
        RGB_TOG,RGB_HUI,  RGB_SAI, RGB_VAI, RGB_M_P, RGB_M_B,                           KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO, \
-       RGB_MOD,RGB_HUD,  RGB_SAD, RGB_VAD, RGB_M_R, RGB_M_K,                             KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO, \
+       RGB_MOD,RGB_HUD,  RGB_SAD, RGB_VAD, RGB_M_R, RGB_M_K,                           KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO, \
                                            KC_LGUI, KC_TRNS, KC_SPC,          KC_ENT,  KC_TRNS, KC_RALT \
   )
 };

@@ -28,16 +28,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // #define MASTER_RIGHT
 // #define EE_HANDS
 
-// #define SSD1306OLED
-#undef USE_I2C
-#undef SSD1306OLED
+#define SSD1306OLED
+//#undef USE_I2C
+//#undef SSD1306OLED
 
 #define USE_SERIAL_PD2
 
-// #define TAPPING_FORCE_HOLD
-#define TAPPING_TERM 150
-#define RETRO_TAPPING
-#define IGNORE_MOD_TAP_INTERRUPT
+#define TAPPING_FORCE_HOLD
+#define TAPPING_TERM 100
+// #define RETRO_TAPPING
+// #define IGNORE_MOD_TAP_INTERRUPT
 
 #ifdef RGBLIGHT_ENABLE
     #undef RGBLED_NUM
